@@ -44,14 +44,26 @@ $(document).ready(function(){
 
 });
 
+/**
+ * funkce pro zmenu hrace
+ * 
+ * @param hrac
+ * @returns {Number}
+ */
 function changePlayer(hrac){
     hrac += 1;
-    return hrac%2;
+    hrac = hrac%2;
+    return hrac;
 
 
 }
 
-
+/**
+ * vykresleni pole
+ * @param arrayOfEllements
+ * @param pocPoliSirka
+ * @param pocPoliVyska
+ */
 
 function writeArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
     var i,j;
@@ -62,7 +74,15 @@ function writeArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
     }
 }
 
-
+/**
+ * vytvo≈ôen√≠ prazdneho pole
+ * pole slouzi k zaznamenani do ktere bunky v canvasu uz bylo kliknuto
+ * ochrana pred prekreslovani bunek
+ * 
+ * @param arrayOfEllements
+ * @param pocPoliSirka
+ * @param pocPoliVyska
+ */
 function initArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
     var i,j;
     for(i = 0; i < pocPoliSirka; i+=1){
@@ -74,14 +94,16 @@ function initArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
     }
 }
 
-
+/**
+ * vrac√≠ string, ktery obsahuje jeden radek do zaznamu
+ */
 function saveClick(){
-    var save = "Click " + click + "bunka[" + y +" / " + x +"]";
+ //   var save = "Click " + click + "bunka[" + y +" / " + x +"]";
 }
 
 
 /**
- *
+ * vrati objekt se stredem bunky
  * @param cellX
  * @param cellY
  */
@@ -94,7 +116,7 @@ function getMiddleOfCell(cellX, cellY, velikostPole){
 
 
 /**
- * * funkce pro zÌsk·nÌ sou¯adnic bunÏk
+ * funkce pro ziskani souradnic bunek
  * @param canX
  * @param canY
  * @param lineWidth
@@ -116,7 +138,7 @@ function getCellCoords(canX, canY, lineWidth, cellWH){
 
 
 /**
- * funkce pro zjistÏnÌ x a y sou¯adnic po kliknutÌ na canvas
+ * funkce pro zjisteni x a y souradnic po kliknuti na canvas
  */
 function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
@@ -127,7 +149,7 @@ function getMousePos(canvas, evt) {
 }
 
 /**
- * vykreslÌ pole
+ * vykresli pole
  * @param x
  * @param y
  * @param velP
