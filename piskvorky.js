@@ -14,7 +14,6 @@ $(document).ready(function(){
     var hrac = 0;
 
     initArray(arrayOfEllements,pocPoliSirka,  pocPoliVyska);
-    writeArray(arrayOfEllements, pocPoliSirka, pocPoliVyska);
     vykresliPole(pocPoliSirka, pocPoliVyska, velikostPole)
 
     $(canvas).click(function(event){
@@ -23,18 +22,26 @@ $(document).ready(function(){
         pos = getMousePos(this, event);
         canvasX = pos.x;
         canvasY = pos.y;
-
+        console.log("souradnice X: " + canvasX + " Y: " + canvasY);
+        
         var cells = getCellCoords(canvasX, canvasY, sirkaLinky, velikostPole);
-
+        console.log("bunka x: " + cells.x + " bunka y: " + cells.y);
+        
         var stred = getMiddleOfCell(cells.x, cells.y, velikostPole);
 
-        hrac = changePlayer(hrac);
-
-
-        if(arrayOfEllements[cells.x][cells.y] ==1 ){
-            alert(arrayOfEllements[cells.x][cells.y]);
+        console.log("array: " + arrayOfEllements[cells.x-1][cells.y-1]);
+        console.log("cells.x : " +cells.x + " cells.y :"  + cells.y);
+        
+        if(arrayOfEllements[cells.x-1][cells.y-1] === 1 ){
+            //alert(arrayOfEllements[cells.x][cells.y]);
         }else{
-            arrayOfEllements[cells.x][cells.y] = 1;
+            if(hrac === 0){
+            	vykresliKolecko(stred.stredX, stred.stredY, velikostPole);
+            }else{
+            	vykresliKrizek(stred.stredX, stred.stredY, velikostPole);
+            }
+            arrayOfEllements[cells.x-1][cells.y-1] = 1;
+            hrac = changePlayer(hrac);
         }
 
     });
@@ -54,9 +61,8 @@ function changePlayer(hrac){
     hrac += 1;
     hrac = hrac%2;
     return hrac;
-
-
 }
+
 
 /**
  * vykresleni pole
@@ -106,12 +112,13 @@ function saveClick(){
  * vrati objekt se stredem bunky
  * @param cellX
  * @param cellY
+ * @returns {{stredX: number, stredY: number}}
  */
 function getMiddleOfCell(cellX, cellY, velikostPole){
     return {
-            stredX : velikostPole*cellX - velikostPole/2,
-            stredY : velikostPole*cellY - velikostPole/2
-        }
+    	stredX : velikostPole*cellX - velikostPole/2,
+        stredY : velikostPole*cellY - velikostPole/2
+    }
 }
 
 
@@ -172,3 +179,68 @@ function vykresliPole(x, y, velP) {
     }
 
 }
+
+
+/**
+ * vykreslí křížek
+ * @param stredX
+ * @param stredY
+ * @param velP
+ */
+function vykresliKrizek(stredX, stredY, velP) {
+    var c = $("canvas");
+    var ctx = c[0].getContext("2d");
+    var polomer = velP/2-5;
+
+    // čára: /
+    ctx.moveTo(stredX + polomer, stredY - polomer);
+    ctx.lineTo(stredX - polomer, stredY + polomer);
+    ctx.strokeStyle="blue";
+
+    // čára: \
+    ctx.moveTo(stredX - polomer, stredY - polomer);
+    ctx.lineTo(stredX + polomer, stredY + polomer);
+    ctx.strokeStyle="blue";
+
+    ctx.stroke();
+}
+
+/**
+ * vykreslí kolečko
+ * @param stredX
+ * @param stredY
+ * @param velP
+ */
+function vykresliKolecko(stredX, stredY, velP) {
+    var c = $("canvas");
+    var ctx = c[0].getContext("2d");
+    var polomer = velP/2-5;
+
+    ctx.beginPath();
+    ctx.arc(stredX, stredY, polomer, 0, 2 * Math.PI);
+    ctx.strokeStyle="red";
+    ctx.stroke();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
