@@ -1,19 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <title></title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
+    <header>
+        <h1>Piškvorky</h1>
+    </header>
 
-</body>
-    <div></div>
+    <nav>
+        <button id="novaHraBtn">Nová hra</button>
+        <button id="ulozHruBtn">Uložit hru</button>
+        <button id="prehledHerBtn">Přehled her</button>
+    </nav>
 
-	<canvas id="canvas" width="500" height="500"></canvas>
-    <div id="krokyHracu"></div>
+    <section>
+	    <canvas id="canvas" width="500" height="500"></canvas>
+
+        <div id="prehledPrubehuHry">
+            <h2>Průběh hry</h2>
+            <div id="krokyHracuDiv">
+                <ol id="krokyHracu"> </ol>
+            </div>
+        </div>
+
+    </section>
+    <footer>autoři: Lukáš Hodáň, Jiří Hofman, Veronika Hanušková</footer>
+
 
     <script src = "http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src ="localStorage.js"></script>
     <script src ="piskvorky.js"></script>
+</body>
 </html>

@@ -334,8 +334,7 @@ function vykresliPole(x, y, velP) {
         ctx.lineTo(x*velP, i*velP); // odkud, kam
         ctx.stroke();
     }
-
-
+    
 
     //vyska
     for (k = 0; k <= y; k++) {
