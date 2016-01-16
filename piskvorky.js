@@ -120,8 +120,7 @@ function evaluate(player, cellX, cellY, arrayOfEllements){
 			}else{
 				if(arrayOfEllements[cellX+i][cellY+j] == player){
 					num = getNumber(arrayOfEllements, i, j, cellX, cellY, player);
-					alert(num);
-					if(num == 3){
+					if(num === 5){
 						alert("victory");
 						stredObj = getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements);
 						drawVictoryLine(stredObj, player);
