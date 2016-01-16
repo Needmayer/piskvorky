@@ -251,7 +251,6 @@ function getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements){
 			}
 		}
 
-
 		if(end1 && end2){
 
 			return {
