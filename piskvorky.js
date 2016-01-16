@@ -1,17 +1,19 @@
 /**
  * Created by student on 7.1.2016.
  */
-
+var velikostPole = 50;
+var pocPoliSirka = 10;
+var pocPoliVyska = 10;
 
 $(document).ready(function(){
 
     var canvasX, canvasY;
-    var pocPoliSirka = 10;
-    var pocPoliVyska = 10;
-    var velikostPole = 50;
+    
+    
     var sirkaLinky = 1;
     var arrayOfEllements = [];
     var hrac = 0;
+   
 
     initArray(arrayOfEllements,pocPoliSirka,  pocPoliVyska);
     vykresliPole(pocPoliSirka, pocPoliVyska, velikostPole)
@@ -22,33 +24,34 @@ $(document).ready(function(){
         pos = getMousePos(this, event);
         canvasX = pos.x;
         canvasY = pos.y;
-        console.log("souradnice X: " + canvasX + " Y: " + canvasY);
+  //      console.log("souradnice X: " + canvasX + " Y: " + canvasY);
         
         var cells = getCellCoords(canvasX, canvasY, sirkaLinky, velikostPole);
-        console.log("bunka x: " + cells.x + " bunka y: " + cells.y);
+ //       console.log("bunka x: " + cells.x + " bunka y: " + cells.y);
         
         var stred = getMiddleOfCell(cells.x, cells.y, velikostPole);
 
-        console.log("array: " + arrayOfEllements[cells.x-1][cells.y-1]);
+        console.log("array: " + arrayOfEllements[cells.x][cells.y]);
         console.log("cells.x : " +cells.x + " cells.y :"  + cells.y);
-        
-        if(arrayOfEllements[cells.x-1][cells.y-1] === 1 ){
-            //alert(arrayOfEllements[cells.x][cells.y]);
+        console.log(stred);
+
+        if(arrayOfEllements[cells.x][cells.y] !== -1 ){
         }else{
-            if(hrac === 0){
+            if(hrac == 0){
             	vykresliKolecko(stred.stredX, stred.stredY, velikostPole);
+                $("#krokyHracu").append("<p>" + saveClick(cells, "kolečko") + "</p>");
+                arrayOfEllements[cells.x][cells.y] = 0;
+
             }else{
             	vykresliKrizek(stred.stredX, stred.stredY, velikostPole);
+                $("#krokyHracu").append("<p>" + saveClick(cells, "křížek") + "</p>"); 
+                arrayOfEllements[cells.x][cells.y] = 1;
             }
-            arrayOfEllements[cells.x-1][cells.y-1] = 1;
+            evaluate(hrac, parseInt(cells.x), parseInt(cells.y), arrayOfEllements);
             hrac = changePlayer(hrac);
         }
 
     });
-
-
-
-
 });
 
 /**
@@ -56,6 +59,7 @@ $(document).ready(function(){
  * 
  * @param hrac
  * @returns {Number}
+ * created by: Lukáš
  */
 function changePlayer(hrac){
     hrac += 1;
@@ -69,6 +73,7 @@ function changePlayer(hrac){
  * @param arrayOfEllements
  * @param pocPoliSirka
  * @param pocPoliVyska
+ * created by: Lukáš
  */
 
 function writeArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
@@ -88,6 +93,7 @@ function writeArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
  * @param arrayOfEllements
  * @param pocPoliSirka
  * @param pocPoliVyska
+ * created by: Lukáš
  */
 function initArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
     var i,j;
@@ -95,16 +101,179 @@ function initArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
         arrayOfEllements.push(new Array);
 
         for(j = 0; j < pocPoliVyska; j+=1){
-            arrayOfEllements[i].push(0);
+            arrayOfEllements[i].push(-1);
         }
     }
 }
 
 /**
- * vrací string, ktery obsahuje jeden radek do zaznamu
+ * 
+ * @param player
+ * @param cellX
+ * @param cellY
+ * @param arrayOfEllements
+ * created by: Lukáš
  */
-function saveClick(){
- //   var save = "Click " + click + "bunka[" + y +" / " + x +"]";
+function evaluate(player, cellX, cellY, arrayOfEllements){
+	var i, j, num = 1, stredObj;
+	
+	for(i = -1; i < 2; i+=1){
+		for(j = -1; j <2; j+=1){
+			console.log("souradnice :  ["+(cellX+i)+", " + (cellY + j) + "]");
+			
+			if(cellX + i < 0 || cellX + i > 9 || 
+					cellY + j < 0 || cellY +j >9 || (i==0 && j == 0)){
+				
+				continue;
+			}else{
+				if(arrayOfEllements[cellX+i][cellY+j] == player){
+					num = getNumber(arrayOfEllements, i, j, cellX, cellY, player);
+					alert(num);
+					if(num == 3){
+						alert("victory");
+						console.log("i : "+ i + " j : " +j);
+						stredObj = getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements);
+						console.log(stredObj);
+						drawVictoryLine(stredObj, player);
+					}
+				}
+			}
+		}		
+	}
+}
+/**
+ * získá pocet stejných prvku v jednom smeru
+ * @param arrayOfEllements
+ * @param i
+ * @param j
+ * @param cellX
+ * @param cellY
+ * @param player
+ * @returns {Number}
+ * created by: Lukáš
+ */
+function getNumber(arrayOfEllements, i, j, cellX, cellY, player){
+	var n = 1, pocet = 1;
+	var end1 = false, end2 = false;
+	while(n < 5){
+		if(checkBoundsPositive(cellX,cellY, n, i, j)){		
+			if(!end1 && arrayOfEllements[(cellX+(i*n))][(cellY+(n*j))] == player){
+				pocet+=1;			
+			}else{
+				end1 = true;			
+			}
+		}else{
+			end1 = true;
+		}
+				
+		if(checkBoundsNegative(cellX,cellY, n, i, j)){
+			if(!end2 && arrayOfEllements[(cellX-(i*n))][(cellY-(n*j))] == player){
+				pocet+=1;			
+			}else{
+				end2 = true;			
+			}
+		}else{
+			end2 = true;
+		}
+		
+		if(end1 && end2){
+			break;
+		}else{
+			n +=1;
+		}
+	}
+	
+	return pocet;
+}
+
+/**
+ * zajisteni neprekroceni hranic pole
+ * @param cellX
+ * @param cellY
+ * @param n
+ * @param i
+ * @param j
+ * @returns {Boolean}
+ * created by: Lukáš
+ */
+function checkBoundsPositive(cellX,cellY, n, i, j){
+	if(cellX+(i*n)>-1 && cellX+(i*n) < pocPoliSirka &&
+	   cellY+(n*j)>-1 && (cellY+(n*j)) < pocPoliVyska){
+		return true;
+	}
+	return false;
+}
+
+/**
+ * zajisteni neprekroceni hranic pole
+ * @param cellX
+ * @param cellY
+ * @param n
+ * @param i
+ * @param j
+ * @returns {Boolean}
+ * created by: Lukáš
+ */
+function checkBoundsNegative(cellX,cellY, n, i, j){
+	if((cellX-(i*n))>-1 && (cellX-(i*n)) < pocPoliSirka &&		
+		cellY-(n*j )>-1 && (cellY-(n*j)) < pocPoliVyska){
+		return true;
+	}
+	return false;
+}
+
+
+/**
+ * funkce zjistí stredy posledních dvou bodu vitezne linie
+ * @param player
+ * @param cellX
+ * @param cellY
+ * @param i
+ * @param j
+ * @returns {}
+ * created by: Lukáš
+ */
+function getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements){
+	var n = 1, stred1, stred2;
+	var end1 = false, end2 = false;
+	
+	while(n < 5){
+		if(checkBoundsPositive(cellX, cellY, n, i, j) && arrayOfEllements[(cellX+(i*n))][(cellY+(n*j))] == player){			
+			
+		}else{
+			if(!end1){
+				stred1 = getMiddleOfCell((cellX+(i*(n-1))), (cellY+((n-1)*j)), velikostPole);
+				end1 = true;
+			}			
+		}		
+		if(checkBoundsNegative(cellX, cellY, n, i, j) && arrayOfEllements[(cellX-(i*n))][(cellY-(n*j))] == player){			
+		}else{
+			if(!end2){
+				stred2 = getMiddleOfCell((cellX-(i*(n-1))), (cellY-((n-1)*j)), velikostPole);
+				end2 = true;
+				console.log(end2);
+			}			
+		}
+				
+		if(end1 && end2){	
+			return {
+				stred1 : stred1,
+				stred2 : stred2
+			};
+		}else{
+			n+=1;
+		}		
+	}
+}
+
+
+/**
+ * vrací string, ktery obsahuje jeden radek do zaznamu
+ * created by: Lukáš, Verča
+ */
+function saveClick(bunka, hrac){
+    var click = "[" + bunka.x + "] [" + bunka.y + "] " + hrac;
+    return click;
 }
 
 
@@ -113,11 +282,12 @@ function saveClick(){
  * @param cellX
  * @param cellY
  * @returns {{stredX: number, stredY: number}}
+ * created by: Lukáš
  */
 function getMiddleOfCell(cellX, cellY, velikostPole){
     return {
-    	stredX : velikostPole*cellX - velikostPole/2,
-        stredY : velikostPole*cellY - velikostPole/2
+    	stredX : velikostPole*cellX + velikostPole/2,
+        stredY : velikostPole*cellY + velikostPole/2
     }
 }
 
@@ -129,12 +299,13 @@ function getMiddleOfCell(cellX, cellY, velikostPole){
  * @param lineWidth
  * @param cellWH
  * @returns {*[]}
+ * created by: Lukáš
  */
 function getCellCoords(canX, canY, lineWidth, cellWH){
 
     var x, y;
-    x = 1 + Math.floor(canX / (cellWH+lineWidth));
-    y = 1 + Math.floor(canY / (cellWH+lineWidth));
+    x = Math.floor(canX / (cellWH+lineWidth));
+    y = Math.floor(canY / (cellWH+lineWidth));
 
     return {
         x : x,
@@ -146,6 +317,7 @@ function getCellCoords(canX, canY, lineWidth, cellWH){
 
 /**
  * funkce pro zjisteni x a y souradnic po kliknuti na canvas
+ * created by: Lukáš
  */
 function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
@@ -160,17 +332,21 @@ function getMousePos(canvas, evt) {
  * @param x
  * @param y
  * @param velP
+ * created by: Verča
  */
 function vykresliPole(x, y, velP) {
     var c = $("canvas");
     var ctx = c[0].getContext("2d");
     var i, k;
+
     //sirka
     for (i = 0; i <= x; i++) {
         ctx.moveTo(0,i*velP);    //x, y
         ctx.lineTo(x*velP, i*velP); // odkud, kam
         ctx.stroke();
     }
+    
+
     //vyska
     for (k = 0; k <= y; k++) {
         ctx.moveTo(k*velP,0);    //x, y
@@ -186,11 +362,13 @@ function vykresliPole(x, y, velP) {
  * @param stredX
  * @param stredY
  * @param velP
+ * created by: Verča
  */
 function vykresliKrizek(stredX, stredY, velP) {
     var c = $("canvas");
     var ctx = c[0].getContext("2d");
     var polomer = velP/2-5;
+    ctx.beginPath();
 
     // čára: /
     ctx.moveTo(stredX + polomer, stredY - polomer);
@@ -203,6 +381,7 @@ function vykresliKrizek(stredX, stredY, velP) {
     ctx.strokeStyle="blue";
 
     ctx.stroke();
+    ctx.closePath();
 }
 
 /**
@@ -210,6 +389,7 @@ function vykresliKrizek(stredX, stredY, velP) {
  * @param stredX
  * @param stredY
  * @param velP
+ * created by: Verča
  */
 function vykresliKolecko(stredX, stredY, velP) {
     var c = $("canvas");
@@ -219,11 +399,20 @@ function vykresliKolecko(stredX, stredY, velP) {
     ctx.beginPath();
     ctx.arc(stredX, stredY, polomer, 0, 2 * Math.PI);
     ctx.strokeStyle="red";
+    ctx.lineWidth=3;
     ctx.stroke();
+    ctx.closePath();
 }
 
 
-
+/**
+ * fukce nakreslí vítěznou linku mezi dvěma posledními body
+ * @param stredObj
+ * @param player
+ */
+function drawVictoryLine(stredObj, player){
+	
+}
 
 
 
