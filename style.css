@@ -40,6 +40,10 @@ h2 {
 
 }
 
+#vitezDiv h2, #vitezDiv div{
+    display: inline-block;
+}
+
 #prehledPrubehuHry {
     float: left;
     padding-left: 20px;

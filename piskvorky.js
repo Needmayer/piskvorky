@@ -110,7 +110,7 @@ function initArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
  * created by: Lukáš
  */
 function evaluate(player, cellX, cellY, arrayOfEllements){
-	var i, j, num = 1, stredObj;
+	var i, j, num = 1, stredObj, hrac;
 
 	for(i = -1; i < 2; i+=1){
 		for(j = -1; j <2; j+=1){
@@ -123,7 +123,14 @@ function evaluate(player, cellX, cellY, arrayOfEllements){
 					if(num === 5){
 						alert("victory");
 						stredObj = getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements);
-						drawVictoryLine(stredObj, player);
+                        drawVictoryLine(stredObj, player);
+
+                        if(player === 0){
+                            hrac = "kolečko";
+                        }else{
+                            hrac = "křížek";
+                        }
+                        $("#viteznyHrac").html("" + hrac);
 					}
 				}
 			}
@@ -227,7 +234,7 @@ function getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements){
 	var n = 1, stred1, stred2;
 	var end1 = false, end2 = false;
 
-	while(n < 5){
+	while(n < 6){
 		if(checkBoundsPositive(cellX, cellY, n, i, j) && arrayOfEllements[(cellX+(i*n))][(cellY+(n*j))] == player){
 
 		}else{
@@ -244,7 +251,10 @@ function getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements){
 			}
 		}
 
+
+
 		if(end1 && end2){
+
 			return {
 				s1 : stred1,
 				s2 : stred2
@@ -365,7 +375,6 @@ function vykresliKrizek(stredX, stredY, velP) {
     // čára: \
     ctx.moveTo(stredX - polomer, stredY - polomer);
     ctx.lineTo(stredX + polomer, stredY + polomer);
-    ctx.strokeStyle="blue";
 
     ctx.stroke();
     ctx.closePath();
@@ -385,7 +394,6 @@ function vykresliKolecko(stredX, stredY, velP) {
 
     ctx.beginPath();
     ctx.arc(stredX, stredY, polomer, 0, 2 * Math.PI);
-    ctx.strokeStyle="red";
     ctx.lineWidth=3;
     ctx.stroke();
     ctx.closePath();
@@ -399,6 +407,16 @@ function vykresliKolecko(stredX, stredY, velP) {
  */
 function drawVictoryLine(stredObj, player){
 
+	console.log(stredObj.s1.stredX);
+
+    var c = $("canvas");
+    var ctx = c[0].getContext("2d");
+
+    ctx.beginPath();
+    ctx.moveTo(stredObj.s1.stredX, stredObj.s1.stredY);
+    ctx.lineTo(stredObj.s2.stredX, stredObj.s2.stredY);
+    ctx.stroke();
+    ctx.closePath();
 }
 
 
