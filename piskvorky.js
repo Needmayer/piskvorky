@@ -191,6 +191,7 @@ function vykresliKrizek(stredX, stredY, velP) {
     var c = $("canvas");
     var ctx = c[0].getContext("2d");
     var polomer = velP/2-5;
+    ctx.beginPath();
 
     // čára: /
     ctx.moveTo(stredX + polomer, stredY - polomer);
@@ -203,6 +204,7 @@ function vykresliKrizek(stredX, stredY, velP) {
     ctx.strokeStyle="blue";
 
     ctx.stroke();
+    ctx.closePath();
 }
 
 /**
@@ -220,6 +222,7 @@ function vykresliKolecko(stredX, stredY, velP) {
     ctx.arc(stredX, stredY, polomer, 0, 2 * Math.PI);
     ctx.strokeStyle="red";
     ctx.stroke();
+    ctx.closePath();
 }
 
 
