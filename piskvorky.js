@@ -11,6 +11,10 @@ $(document).ready(function(){
     
     
     var sirkaLinky = 0;
+    var pocPoliSirka = 10;
+    var pocPoliVyska = 10;
+    var velikostPole = 50;
+    var sirkaLinky = 0;
     var arrayOfEllements = [];
     var hrac = 0;
    
