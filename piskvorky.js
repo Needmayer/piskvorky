@@ -11,10 +11,6 @@ $(document).ready(function(){
     
     
     var sirkaLinky = 0;
-    var pocPoliSirka = 10;
-    var pocPoliVyska = 10;
-    var velikostPole = 50;
-    var sirkaLinky = 0;
     var arrayOfEllements = [];
     var hrac = 0;
    
@@ -34,28 +30,19 @@ $(document).ready(function(){
         var stred = getMiddleOfCell(cells.x, cells.y, velikostPole);
 
         if(arrayOfEllements[cells.x][cells.y] !== -1 ){
-        console.log("array: " + arrayOfEllements[cells.x-1][cells.y-1]);
-        console.log("cells.x : " +cells.x + " cells.y :"  + cells.y);
 
-        var pocetKliku = 0;
-        //var ol = $("<ol></ol>");
         if(arrayOfEllements[cells.x-1][cells.y-1] === 1 ){
-            //alert(arrayOfEllements[cells.x][cells.y]);
         }else{
             if(hrac == 0){
             	vykresliKolecko(stred.stredX, stred.stredY, velikostPole);
                 $("#krokyHracu").append("<p>" + saveClick(cells, "kolečko") + "</p>");
                 arrayOfEllements[cells.x][cells.y] = 0;
 
-
-                $("#krokyHracu").append("<p>" + saveClick(cells, "kolečko") + "</p>");
-                pocetKliku++;
             }else{
             	vykresliKrizek(stred.stredX, stred.stredY, velikostPole);
                 $("#krokyHracu").append("<p>" + saveClick(cells, "křížek") + "</p>"); 
                 arrayOfEllements[cells.x][cells.y] = 1;
-                $("#krokyHracu").append("<p>" + saveClick(cells, "křížek") + "</p>");
-                pocetKliku++;
+                
             }
             evaluate(hrac, parseInt(cells.x), parseInt(cells.y), arrayOfEllements);
             hrac = changePlayer(hrac);
