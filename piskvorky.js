@@ -165,6 +165,7 @@ function vykresliPole(x, y, velP) {
     var c = $("canvas");
     var ctx = c[0].getContext("2d");
     var i, k;
+
     //sirka
     for (i = 0; i <= x; i++) {
         ctx.moveTo(0,i*velP);    //x, y
@@ -221,6 +222,7 @@ function vykresliKolecko(stredX, stredY, velP) {
     ctx.beginPath();
     ctx.arc(stredX, stredY, polomer, 0, 2 * Math.PI);
     ctx.strokeStyle="red";
+    ctx.lineWidth=3;
     ctx.stroke();
     ctx.closePath();
 }
