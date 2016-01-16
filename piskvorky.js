@@ -8,15 +8,15 @@ var pocPoliVyska = 10;
 $(document).ready(function(){
 
     var canvasX, canvasY;
-    
-    
+
+
     var sirkaLinky = 0;
     var arrayOfEllements = [];
     var hrac = 0;
-   
+
 
     initArray(arrayOfEllements,pocPoliSirka,  pocPoliVyska);
-    vykresliPole(pocPoliSirka, pocPoliVyska, velikostPole)
+    vykresliPole(pocPoliSirka, pocPoliVyska, velikostPole);
 
     $(canvas).click(function(event){
 
@@ -24,25 +24,23 @@ $(document).ready(function(){
         pos = getMousePos(this, event);
         canvasX = pos.x;
         canvasY = pos.y;
-        
+
         var cells = getCellCoords(canvasX, canvasY, sirkaLinky, velikostPole);
-        
+
         var stred = getMiddleOfCell(cells.x, cells.y, velikostPole);
 
         if(arrayOfEllements[cells.x][cells.y] !== -1 ){
-
-        if(arrayOfEllements[cells.x-1][cells.y-1] === 1 ){
         }else{
             if(hrac == 0){
             	vykresliKolecko(stred.stredX, stred.stredY, velikostPole);
-                $("#krokyHracu").append("<p>" + saveClick(cells, "kolečko") + "</p>");
+                $("#krokyHracu").append("<li>" + saveClick(cells, "&#9899") + "</li>");
                 arrayOfEllements[cells.x][cells.y] = 0;
 
             }else{
             	vykresliKrizek(stred.stredX, stred.stredY, velikostPole);
-                $("#krokyHracu").append("<p>" + saveClick(cells, "křížek") + "</p>"); 
+                $("#krokyHracu").append("<li>" + saveClick(cells, "&#10006") + "</li>");
                 arrayOfEllements[cells.x][cells.y] = 1;
-                
+
             }
             evaluate(hrac, parseInt(cells.x), parseInt(cells.y), arrayOfEllements);
             hrac = changePlayer(hrac);
@@ -53,7 +51,7 @@ $(document).ready(function(){
 
 /**
  * funkce pro zmenu hrace
- * 
+ *
  * @param hrac
  * @returns {Number}
  * created by: Lukáš
@@ -86,7 +84,7 @@ function writeArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
  * vytvoření prazdneho pole
  * pole slouzi k zaznamenani do ktere bunky v canvasu uz bylo kliknuto
  * ochrana pred prekreslovani bunek
- * 
+ *
  * @param arrayOfEllements
  * @param pocPoliSirka
  * @param pocPoliVyska
@@ -95,7 +93,7 @@ function writeArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
 function initArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
     var i,j;
     for(i = 0; i < pocPoliSirka; i+=1){
-        arrayOfEllements.push(new Array);
+        arrayOfEllements.push([]);
 
         for(j = 0; j < pocPoliVyska; j+=1){
             arrayOfEllements[i].push(-1);
@@ -104,7 +102,7 @@ function initArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
 }
 
 /**
- * 
+ *
  * @param player
  * @param cellX
  * @param cellY
@@ -113,24 +111,23 @@ function initArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
  */
 function evaluate(player, cellX, cellY, arrayOfEllements){
 	var i, j, num = 1, stredObj;
-	
+
 	for(i = -1; i < 2; i+=1){
-		for(j = -1; j <2; j+=1){		
-			if(cellX + i < 0 || cellX + i > 9 || 
-					cellY + j < 0 || cellY +j >9 || (i==0 && j == 0)){				
+		for(j = -1; j <2; j+=1){
+			if(cellX + i < 0 || cellX + i > 9 ||
+					cellY + j < 0 || cellY +j >9 || (i==0 && j == 0)){
 				continue;
 			}else{
 				if(arrayOfEllements[cellX+i][cellY+j] == player){
 					num = getNumber(arrayOfEllements, i, j, cellX, cellY, player);
-					alert(num);
-					if(num == 3){
+					if(num === 5){
 						alert("victory");
 						stredObj = getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements);
 						drawVictoryLine(stredObj, player);
 					}
 				}
 			}
-		}		
+		}
 	}
 }
 /**
@@ -148,33 +145,33 @@ function getNumber(arrayOfEllements, i, j, cellX, cellY, player){
 	var n = 1, pocet = 1;
 	var end1 = false, end2 = false;
 	while(n < 5){
-		if(checkBoundsPositive(cellX,cellY, n, i, j)){		
+		if(checkBoundsPositive(cellX,cellY, n, i, j)){
 			if(!end1 && arrayOfEllements[(cellX+(i*n))][(cellY+(n*j))] == player){
-				pocet+=1;			
+				pocet+=1;
 			}else{
-				end1 = true;			
+				end1 = true;
 			}
 		}else{
 			end1 = true;
 		}
-				
+
 		if(checkBoundsNegative(cellX,cellY, n, i, j)){
 			if(!end2 && arrayOfEllements[(cellX-(i*n))][(cellY-(n*j))] == player){
-				pocet+=1;			
+				pocet+=1;
 			}else{
-				end2 = true;			
+				end2 = true;
 			}
 		}else{
 			end2 = true;
 		}
-		
+
 		if(end1 && end2){
 			break;
 		}else{
 			n +=1;
 		}
 	}
-	
+
 	return pocet;
 }
 
@@ -207,7 +204,7 @@ function checkBoundsPositive(cellX,cellY, n, i, j){
  * created by: Lukáš
  */
 function checkBoundsNegative(cellX,cellY, n, i, j){
-	if((cellX-(i*n))>-1 && (cellX-(i*n)) < pocPoliSirka &&		
+	if((cellX-(i*n))>-1 && (cellX-(i*n)) < pocPoliSirka &&
 		cellY-(n*j )>-1 && (cellY-(n*j)) < pocPoliVyska){
 		return true;
 	}
@@ -222,38 +219,42 @@ function checkBoundsNegative(cellX,cellY, n, i, j){
  * @param cellY
  * @param i
  * @param j
- * @returns {}  s1.stredX, s1.stredY, s2.stredX, s2.stredY
+ * @param arrayOfEllements
+ * @returns {{s1: *, s2: *}}    s1.stredX, s1.stredY, s2.stredX, s2.stredY
  * created by: Lukáš
  */
 function getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements){
 	var n = 1, stred1, stred2;
 	var end1 = false, end2 = false;
-	
-	while(n < 5){
-		if(checkBoundsPositive(cellX, cellY, n, i, j) && arrayOfEllements[(cellX+(i*n))][(cellY+(n*j))] == player){			
-			
+
+	while(n < 6){
+		if(checkBoundsPositive(cellX, cellY, n, i, j) && arrayOfEllements[(cellX+(i*n))][(cellY+(n*j))] == player){
+
 		}else{
 			if(!end1){
 				stred1 = getMiddleOfCell((cellX+(i*(n-1))), (cellY+((n-1)*j)), velikostPole);
 				end1 = true;
-			}			
-		}		
-		if(checkBoundsNegative(cellX, cellY, n, i, j) && arrayOfEllements[(cellX-(i*n))][(cellY-(n*j))] == player){			
+			}
+		}
+		if(checkBoundsNegative(cellX, cellY, n, i, j) && arrayOfEllements[(cellX-(i*n))][(cellY-(n*j))] == player){
 		}else{
 			if(!end2){
 				stred2 = getMiddleOfCell((cellX-(i*(n-1))), (cellY-((n-1)*j)), velikostPole);
 				end2 = true;
-			}			
+			}
 		}
-				
-		if(end1 && end2){	
+
+		
+		
+		if(end1 && end2){
+			
 			return {
 				s1 : stred1,
 				s2 : stred2
 			};
 		}else{
 			n+=1;
-		}		
+		}
 	}
 }
 
@@ -263,8 +264,7 @@ function getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements){
  * created by: Lukáš, Verča
  */
 function saveClick(bunka, hrac){
-    var click = "[" + bunka.x + "] [" + bunka.y + "] " + hrac;
-    return click;
+    return click = "[" + bunka.x + "] [" + bunka.y + "] " + hrac;
 }
 
 
@@ -275,7 +275,7 @@ function saveClick(bunka, hrac){
  * @returns {{stredX: number, stredY: number}}
  * created by: Lukáš
  */
-function getMiddleOfCell(cellX, cellY, velikostPole){
+function getMiddleOfCell(cellX, cellY){
     return {
     	stredX : velikostPole*cellX + velikostPole/2,
         stredY : velikostPole*cellY + velikostPole/2
@@ -338,7 +338,6 @@ function vykresliPole(x, y, velP) {
     }
     
 
-
     //vyska
     for (k = 0; k <= y; k++) {
         ctx.moveTo(k*velP,0);    //x, y
@@ -365,7 +364,6 @@ function vykresliKrizek(stredX, stredY, velP) {
     // čára: /
     ctx.moveTo(stredX + polomer, stredY - polomer);
     ctx.lineTo(stredX - polomer, stredY + polomer);
-    ctx.strokeStyle="blue";
 
     // čára: \
     ctx.moveTo(stredX - polomer, stredY - polomer);
@@ -403,6 +401,8 @@ function vykresliKolecko(stredX, stredY, velP) {
  * @param player
  */
 function drawVictoryLine(stredObj, player){
+
+	console.log(stredObj.s1.stredX);
 	
 }
 
