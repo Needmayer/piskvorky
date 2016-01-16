@@ -9,7 +9,7 @@ $(document).ready(function(){
     var pocPoliSirka = 10;
     var pocPoliVyska = 10;
     var velikostPole = 50;
-    var sirkaLinky = 1;
+    var sirkaLinky = 0;
     var arrayOfEllements = [];
     var hrac = 0;
 
@@ -31,14 +31,21 @@ $(document).ready(function(){
 
         console.log("array: " + arrayOfEllements[cells.x-1][cells.y-1]);
         console.log("cells.x : " +cells.x + " cells.y :"  + cells.y);
-        
+
+        var pocetKliku = 0;
+        //var ol = $("<ol></ol>");
         if(arrayOfEllements[cells.x-1][cells.y-1] === 1 ){
             //alert(arrayOfEllements[cells.x][cells.y]);
         }else{
             if(hrac === 0){
             	vykresliKolecko(stred.stredX, stred.stredY, velikostPole);
+
+                $("#krokyHracu").append("<p>" + saveClick(cells, "kolečko") + "</p>");
+                pocetKliku++;
             }else{
             	vykresliKrizek(stred.stredX, stred.stredY, velikostPole);
+                $("#krokyHracu").append("<p>" + saveClick(cells, "křížek") + "</p>");
+                pocetKliku++;
             }
             arrayOfEllements[cells.x-1][cells.y-1] = 1;
             hrac = changePlayer(hrac);
@@ -56,6 +63,7 @@ $(document).ready(function(){
  * 
  * @param hrac
  * @returns {Number}
+ * created by: Lukáš
  */
 function changePlayer(hrac){
     hrac += 1;
@@ -69,6 +77,7 @@ function changePlayer(hrac){
  * @param arrayOfEllements
  * @param pocPoliSirka
  * @param pocPoliVyska
+ * created by: Lukáš
  */
 
 function writeArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
@@ -88,6 +97,7 @@ function writeArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
  * @param arrayOfEllements
  * @param pocPoliSirka
  * @param pocPoliVyska
+ * created by: Lukáš
  */
 function initArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
     var i,j;
@@ -102,9 +112,11 @@ function initArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
 
 /**
  * vrací string, ktery obsahuje jeden radek do zaznamu
+ * created by: Lukáš, Verča
  */
-function saveClick(){
- //   var save = "Click " + click + "bunka[" + y +" / " + x +"]";
+function saveClick(bunka, hrac){
+    var click = "[" + bunka.x + "] [" + bunka.y + "] " + hrac;
+    return click;
 }
 
 
@@ -113,6 +125,7 @@ function saveClick(){
  * @param cellX
  * @param cellY
  * @returns {{stredX: number, stredY: number}}
+ * created by: Lukáš
  */
 function getMiddleOfCell(cellX, cellY, velikostPole){
     return {
@@ -129,6 +142,7 @@ function getMiddleOfCell(cellX, cellY, velikostPole){
  * @param lineWidth
  * @param cellWH
  * @returns {*[]}
+ * created by: Lukáš
  */
 function getCellCoords(canX, canY, lineWidth, cellWH){
 
@@ -146,6 +160,7 @@ function getCellCoords(canX, canY, lineWidth, cellWH){
 
 /**
  * funkce pro zjisteni x a y souradnic po kliknuti na canvas
+ * created by: Lukáš
  */
 function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
@@ -160,6 +175,7 @@ function getMousePos(canvas, evt) {
  * @param x
  * @param y
  * @param velP
+ * created by: Verča
  */
 function vykresliPole(x, y, velP) {
     var c = $("canvas");
@@ -172,7 +188,7 @@ function vykresliPole(x, y, velP) {
         ctx.lineTo(x*velP, i*velP); // odkud, kam
         ctx.stroke();
     }
-    
+
     //vyska
     for (k = 0; k <= y; k++) {
         ctx.moveTo(k*velP,0);    //x, y
@@ -188,6 +204,7 @@ function vykresliPole(x, y, velP) {
  * @param stredX
  * @param stredY
  * @param velP
+ * created by: Verča
  */
 function vykresliKrizek(stredX, stredY, velP) {
     var c = $("canvas");
@@ -214,6 +231,7 @@ function vykresliKrizek(stredX, stredY, velP) {
  * @param stredX
  * @param stredY
  * @param velP
+ * created by: Verča
  */
 function vykresliKolecko(stredX, stredY, velP) {
     var c = $("canvas");
