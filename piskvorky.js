@@ -24,16 +24,10 @@ $(document).ready(function(){
         pos = getMousePos(this, event);
         canvasX = pos.x;
         canvasY = pos.y;
-  //      console.log("souradnice X: " + canvasX + " Y: " + canvasY);
         
         var cells = getCellCoords(canvasX, canvasY, sirkaLinky, velikostPole);
- //       console.log("bunka x: " + cells.x + " bunka y: " + cells.y);
         
         var stred = getMiddleOfCell(cells.x, cells.y, velikostPole);
-
-        console.log("array: " + arrayOfEllements[cells.x][cells.y]);
-        console.log("cells.x : " +cells.x + " cells.y :"  + cells.y);
-        console.log(stred);
 
         if(arrayOfEllements[cells.x][cells.y] !== -1 ){
         }else{
@@ -118,12 +112,9 @@ function evaluate(player, cellX, cellY, arrayOfEllements){
 	var i, j, num = 1, stredObj;
 	
 	for(i = -1; i < 2; i+=1){
-		for(j = -1; j <2; j+=1){
-			console.log("souradnice :  ["+(cellX+i)+", " + (cellY + j) + "]");
-			
+		for(j = -1; j <2; j+=1){		
 			if(cellX + i < 0 || cellX + i > 9 || 
-					cellY + j < 0 || cellY +j >9 || (i==0 && j == 0)){
-				
+					cellY + j < 0 || cellY +j >9 || (i==0 && j == 0)){				
 				continue;
 			}else{
 				if(arrayOfEllements[cellX+i][cellY+j] == player){
@@ -131,9 +122,7 @@ function evaluate(player, cellX, cellY, arrayOfEllements){
 					alert(num);
 					if(num == 3){
 						alert("victory");
-						console.log("i : "+ i + " j : " +j);
 						stredObj = getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements);
-						console.log(stredObj);
 						drawVictoryLine(stredObj, player);
 					}
 				}
@@ -230,7 +219,7 @@ function checkBoundsNegative(cellX,cellY, n, i, j){
  * @param cellY
  * @param i
  * @param j
- * @returns {}
+ * @returns {}  s1.stredX, s1.stredY, s2.stredX, s2.stredY
  * created by: Lukáš
  */
 function getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements){
@@ -251,14 +240,13 @@ function getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements){
 			if(!end2){
 				stred2 = getMiddleOfCell((cellX-(i*(n-1))), (cellY-((n-1)*j)), velikostPole);
 				end2 = true;
-				console.log(end2);
 			}			
 		}
 				
 		if(end1 && end2){	
 			return {
-				stred1 : stred1,
-				stred2 : stred2
+				s1 : stred1,
+				s2 : stred2
 			};
 		}else{
 			n+=1;
