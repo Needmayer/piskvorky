@@ -128,9 +128,9 @@ function evaluate(player, cellX, cellY, arrayOfEllements){
                         drawVictoryLine(stredObj, player);
 
                         if(player === 0){
-                            hrac = "kolečko";
+                            hrac = "&#9899";    //kolečko
                         }else{
-                            hrac = "křížek";
+                            hrac = "&#10006";   //křížek
                         }
                         $("#viteznyHrac").html("" + hrac);
                     }
@@ -371,6 +371,8 @@ function vykresliKrizek(stredX, stredY, velP) {
     var ctx = c[0].getContext("2d");
     var polomer = velP/2-5;
     ctx.beginPath();
+    ctx.lineWidth=3;
+    ctx.strokeStyle = "black";
 
     // čára: /
     ctx.moveTo(stredX + polomer, stredY - polomer);
@@ -397,8 +399,9 @@ function vykresliKolecko(stredX, stredY, velP) {
     var polomer = velP/2-5;
 
     ctx.beginPath();
-    ctx.arc(stredX, stredY, polomer, 0, 2 * Math.PI);
     ctx.lineWidth=3;
+    ctx.strokeStyle = "black";
+    ctx.arc(stredX, stredY, polomer, 0, 2 * Math.PI);
     ctx.stroke();
     ctx.closePath();
 }
@@ -414,11 +417,10 @@ function drawVictoryLine(stredObj, player){
     var c = $("canvas");
     var ctx = c[0].getContext("2d");
     ctx.beginPath();
-
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = "#888888";
     ctx.moveTo(stredObj.s1.stredX, stredObj.s1.stredY);
     ctx.lineTo(stredObj.s2.stredX, stredObj.s2.stredY);
-    ctx.lineWidth = 10;
-    
     ctx.stroke();
     ctx.closePath();
 }
