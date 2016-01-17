@@ -33,14 +33,14 @@ $(document).ready(function(){
         }else{
             if(hrac == 0){
                 vykresliKolecko(stred.stredX, stred.stredY, velikostPole);
-                $("#krokyHracu").append("<li>" + saveClick(cells, "&#9899") + "</li>");
+                $("#krokyHracu").append("<li>" + prehledKliku(cells, "&#9899") + "</li>");
                 arrayOfEllements[cells.x][cells.y] = 0;
-
+                saveClick(cells);
             }else{
                 vykresliKrizek(stred.stredX, stred.stredY, velikostPole);
-                $("#krokyHracu").append("<li>" + saveClick(cells, "&#10006") + "</li>");
+                $("#krokyHracu").append("<li>" + prehledKliku(cells, "&#10006") + "</li>");
                 arrayOfEllements[cells.x][cells.y] = 1;
-
+                saveClick(cells);
             }
             evaluate(hrac, parseInt(cells.x), parseInt(cells.y), arrayOfEllements);
             hrac = changePlayer(hrac);
@@ -271,11 +271,22 @@ function getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements){
 
 
 /**
- * vrací string, ktery obsahuje jeden radek do zaznamu
- * created by: Lukáš, Verča
+ * vraci string obsahujici jeden radek postupu hry
+ * created by: Verča
  */
-function saveClick(bunka, hrac){
-    return click = "[" + bunka.x + "] [" + bunka.y + "] " + hrac;
+function prehledKliku(bunka, hrac){
+    return klik = "[" + bunka.x + "] [" + bunka.y + "] " + hrac;
+}
+
+/**
+ * TODO: pro Jirku
+ * vrací string, ktery obsahuje jeden radek do zaznamu
+ * vola se v click
+ * @param bunka
+ * @returns {string}
+ */
+function saveClick(bunka){
+    return click = "[" + bunka.x + "] [" + bunka.y + "]";
 }
 
 
