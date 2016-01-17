@@ -32,12 +32,12 @@ $(document).ready(function(){
         if(arrayOfEllements[cells.x][cells.y] !== -1 ){
         }else{
             if(hrac == 0){
-            	vykresliKolecko(stred.stredX, stred.stredY, velikostPole);
+                vykresliKolecko(stred.stredX, stred.stredY, velikostPole);
                 $("#krokyHracu").append("<li>" + saveClick(cells, "&#9899") + "</li>");
                 arrayOfEllements[cells.x][cells.y] = 0;
 
             }else{
-            	vykresliKrizek(stred.stredX, stred.stredY, velikostPole);
+                vykresliKrizek(stred.stredX, stred.stredY, velikostPole);
                 $("#krokyHracu").append("<li>" + saveClick(cells, "&#10006") + "</li>");
                 arrayOfEllements[cells.x][cells.y] = 1;
 
@@ -110,25 +110,34 @@ function initArray(arrayOfEllements, pocPoliSirka, pocPoliVyska){
  * created by: Lukáš
  */
 function evaluate(player, cellX, cellY, arrayOfEllements){
-	var i, j, num = 1, stredObj;
+    var i, j, num = 1, stredObj, hrac;
 
-	for(i = -1; i < 2; i+=1){
-		for(j = -1; j <2; j+=1){
-			if(cellX + i < 0 || cellX + i > 9 ||
-					cellY + j < 0 || cellY +j >9 || (i==0 && j == 0)){
-				continue;
-			}else{
-				if(arrayOfEllements[cellX+i][cellY+j] == player){
-					num = getNumber(arrayOfEllements, i, j, cellX, cellY, player);
-					if(num === 5){
-						alert("victory");
-						stredObj = getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements);
-						drawVictoryLine(stredObj, player);
-					}
-				}
-			}
-		}
-	}
+    for(i = -1; i < 2; i+=1){
+        for(j = -1; j <2; j+=1){
+            if(cellX + i < 0 || cellX + i > 9 ||
+                cellY + j < 0 || cellY +j >9 || (i==0 && j == 0)){
+                continue;
+            }else{
+                if(arrayOfEllements[cellX+i][cellY+j] == player){
+                    num = getNumber(arrayOfEllements, i, j, cellX, cellY,
+                        player);
+                    if(num === 5){
+                        alert("victory");
+                        stredObj = getVictoryLine(player, cellX,
+                            cellY, i, j, arrayOfEllements);
+                        drawVictoryLine(stredObj, player);
+
+                        if(player === 0){
+                            hrac = "kolečko";
+                        }else{
+                            hrac = "křížek";
+                        }
+                        $("#viteznyHrac").html("" + hrac);
+                    }
+                }
+            }
+        }
+    }
 }
 /**
  * získá pocet stejných prvku v jednom smeru
@@ -142,37 +151,37 @@ function evaluate(player, cellX, cellY, arrayOfEllements){
  * created by: Lukáš
  */
 function getNumber(arrayOfEllements, i, j, cellX, cellY, player){
-	var n = 1, pocet = 1;
-	var end1 = false, end2 = false;
-	while(n < 5){
-		if(checkBoundsPositive(cellX,cellY, n, i, j)){
-			if(!end1 && arrayOfEllements[(cellX+(i*n))][(cellY+(n*j))] == player){
-				pocet+=1;
-			}else{
-				end1 = true;
-			}
-		}else{
-			end1 = true;
-		}
+    var n = 1, pocet = 1;
+    var end1 = false, end2 = false;
+    while(n < 5){
+        if(checkBoundsPositive(cellX,cellY, n, i, j)){
+            if(!end1 && arrayOfEllements[(cellX+(i*n))][(cellY+(n*j))] == player){
+                pocet+=1;
+            }else{
+                end1 = true;
+            }
+        }else{
+            end1 = true;
+        }
 
-		if(checkBoundsNegative(cellX,cellY, n, i, j)){
-			if(!end2 && arrayOfEllements[(cellX-(i*n))][(cellY-(n*j))] == player){
-				pocet+=1;
-			}else{
-				end2 = true;
-			}
-		}else{
-			end2 = true;
-		}
+        if(checkBoundsNegative(cellX,cellY, n, i, j)){
+            if(!end2 && arrayOfEllements[(cellX-(i*n))][(cellY-(n*j))] == player){
+                pocet+=1;
+            }else{
+                end2 = true;
+            }
+        }else{
+            end2 = true;
+        }
 
-		if(end1 && end2){
-			break;
-		}else{
-			n +=1;
-		}
-	}
+        if(end1 && end2){
+            break;
+        }else{
+            n +=1;
+        }
+    }
 
-	return pocet;
+    return pocet;
 }
 
 /**
@@ -186,11 +195,11 @@ function getNumber(arrayOfEllements, i, j, cellX, cellY, player){
  * created by: Lukáš
  */
 function checkBoundsPositive(cellX,cellY, n, i, j){
-	if(cellX+(i*n)>-1 && cellX+(i*n) < pocPoliSirka &&
-	   cellY+(n*j)>-1 && (cellY+(n*j)) < pocPoliVyska){
-		return true;
-	}
-	return false;
+    if(cellX+(i*n)>-1 && cellX+(i*n) < pocPoliSirka &&
+        cellY+(n*j)>-1 && (cellY+(n*j)) < pocPoliVyska){
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -204,11 +213,11 @@ function checkBoundsPositive(cellX,cellY, n, i, j){
  * created by: Lukáš
  */
 function checkBoundsNegative(cellX,cellY, n, i, j){
-	if((cellX-(i*n))>-1 && (cellX-(i*n)) < pocPoliSirka &&
-		cellY-(n*j )>-1 && (cellY-(n*j)) < pocPoliVyska){
-		return true;
-	}
-	return false;
+    if((cellX-(i*n))>-1 && (cellX-(i*n)) < pocPoliSirka &&
+        cellY-(n*j )>-1 && (cellY-(n*j)) < pocPoliVyska){
+        return true;
+    }
+    return false;
 }
 
 
@@ -224,38 +233,40 @@ function checkBoundsNegative(cellX,cellY, n, i, j){
  * created by: Lukáš
  */
 function getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements){
-	var n = 1, stred1, stred2;
-	var end1 = false, end2 = false;
+    var n = 1, stred1, stred2;
+    var end1 = false, end2 = false;
 
-	while(n < 6){
-		if(checkBoundsPositive(cellX, cellY, n, i, j) && arrayOfEllements[(cellX+(i*n))][(cellY+(n*j))] == player){
+    while(n < 6){
+        if(checkBoundsPositive(cellX, cellY, n, i, j) && arrayOfEllements[(cellX+(i*n))][(cellY
+            +(n*j))] == player){
 
-		}else{
-			if(!end1){
-				stred1 = getMiddleOfCell((cellX+(i*(n-1))), (cellY+((n-1)*j)), velikostPole);
-				end1 = true;
-			}
-		}
-		if(checkBoundsNegative(cellX, cellY, n, i, j) && arrayOfEllements[(cellX-(i*n))][(cellY-(n*j))] == player){
-		}else{
-			if(!end2){
-				stred2 = getMiddleOfCell((cellX-(i*(n-1))), (cellY-((n-1)*j)), velikostPole);
-				end2 = true;
-			}
-		}
+        }else{
+            if(!end1){
+                stred1 = getMiddleOfCell((cellX+(i*(n-1))), (cellY+((n-1)*j)),
+                    velikostPole);
+                end1 = true;
+            }
+        }
+        if(checkBoundsNegative(cellX, cellY, n, i, j) && arrayOfEllements[(cellX-(i*n))][(cellY-
+            (n*j))] == player){
+        }else{
+            if(!end2){
+                stred2 = getMiddleOfCell((cellX-(i*(n-1))), (cellY-((n-1)*j)),
+                    velikostPole);
+                end2 = true;
+            }
+        }
 
-		
-		
-		if(end1 && end2){
-			
-			return {
-				s1 : stred1,
-				s2 : stred2
-			};
-		}else{
-			n+=1;
-		}
-	}
+        if(end1 && end2){
+
+            return {
+                s1 : stred1,
+                s2 : stred2
+            };
+        }else{
+            n+=1;
+        }
+    }
 }
 
 
@@ -277,7 +288,7 @@ function saveClick(bunka, hrac){
  */
 function getMiddleOfCell(cellX, cellY){
     return {
-    	stredX : velikostPole*cellX + velikostPole/2,
+        stredX : velikostPole*cellX + velikostPole/2,
         stredY : velikostPole*cellY + velikostPole/2
     }
 }
@@ -336,7 +347,7 @@ function vykresliPole(x, y, velP) {
         ctx.lineTo(x*velP, i*velP); // odkud, kam
         ctx.stroke();
     }
-    
+
 
     //vyska
     for (k = 0; k <= y; k++) {
@@ -368,7 +379,6 @@ function vykresliKrizek(stredX, stredY, velP) {
     // čára: \
     ctx.moveTo(stredX - polomer, stredY - polomer);
     ctx.lineTo(stredX + polomer, stredY + polomer);
-    ctx.strokeStyle="blue";
 
     ctx.stroke();
     ctx.closePath();
@@ -388,7 +398,6 @@ function vykresliKolecko(stredX, stredY, velP) {
 
     ctx.beginPath();
     ctx.arc(stredX, stredY, polomer, 0, 2 * Math.PI);
-    ctx.strokeStyle="red";
     ctx.lineWidth=3;
     ctx.stroke();
     ctx.closePath();
@@ -402,26 +411,14 @@ function vykresliKolecko(stredX, stredY, velP) {
  */
 function drawVictoryLine(stredObj, player){
 
-	console.log(stredObj.s1.stredX);
-	
+    console.log(stredObj.s1.stredX);
+
+    var c = $("canvas");
+    var ctx = c[0].getContext("2d");
+
+    ctx.beginPath();
+    ctx.moveTo(stredObj.s1.stredX, stredObj.s1.stredY);
+    ctx.lineTo(stredObj.s2.stredX, stredObj.s2.stredY);
+    ctx.stroke();
+    ctx.closePath();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
