@@ -408,17 +408,17 @@ function vykresliKolecko(stredX, stredY, velP) {
  * fukce nakreslí vítěznou linku mezi dvěma posledními body
  * @param stredObj
  * @param player
+ * created by: Verča
  */
 function drawVictoryLine(stredObj, player){
-
-    console.log(stredObj.s1.stredX);
-
     var c = $("canvas");
     var ctx = c[0].getContext("2d");
-
     ctx.beginPath();
+
     ctx.moveTo(stredObj.s1.stredX, stredObj.s1.stredY);
     ctx.lineTo(stredObj.s2.stredX, stredObj.s2.stredY);
+    ctx.lineWidth = 10;
+    
     ctx.stroke();
     ctx.closePath();
 }
