@@ -122,9 +122,8 @@ function evaluate(player, cellX, cellY, arrayOfEllements){
                     num = getNumber(arrayOfEllements, i, j, cellX, cellY,
                         player);
                     if(num === 5){
-                        alert("victory");
-                        stredObj = getVictoryLine(player, cellX,
-                            cellY, i, j, arrayOfEllements);
+                        
+                        stredObj = getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements);
                         drawVictoryLine(stredObj, player);
 
                         if(player === 0){
@@ -132,7 +131,11 @@ function evaluate(player, cellX, cellY, arrayOfEllements){
                         }else{
                             hrac = "&#10006";   //křížek
                         }
+                        var encoded = hrac;
+                        var decoded = $("<div/>").html(encoded).text();
+                        alert("Zvítězil hráč: " + decoded);
                         $("#viteznyHrac").html("" + hrac);
+                        $(canvas).off('click');
                     }
                 }
             }
