@@ -51,7 +51,6 @@ $(document).ready(function(){
 
 /**
  * funkce pro zmenu hrace
- *
  * @param hrac
  * @returns {Number}
  * created by: Lukáš
@@ -122,9 +121,9 @@ function evaluate(player, cellX, cellY, arrayOfEllements){
                     num = getNumber(arrayOfEllements, i, j, cellX, cellY,
                         player);
                     if(num === 5){
-                        
+
                         stredObj = getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements);
-                        drawVictoryLine(stredObj, player);
+                        drawVictoryLine(stredObj);
 
                         if(player === 0){
                             hrac = "&#9899";    //kolečko
@@ -275,6 +274,9 @@ function getVictoryLine(player, cellX, cellY, i, j, arrayOfEllements){
 
 /**
  * vraci string obsahujici jeden radek postupu hry
+ * @param bunka
+ * @param hrac
+ * @returns {string}
  * created by: Verča
  */
 function prehledKliku(bunka, hrac){
@@ -357,16 +359,16 @@ function vykresliPole(x, y, velP) {
 
     //sirka
     for (i = 0; i <= x; i++) {
-        ctx.moveTo(0,i*velP);    //x, y
-        ctx.lineTo(x*velP, i*velP); // odkud, kam
+        ctx.moveTo(0,i*velP);
+        ctx.lineTo(x*velP, i*velP);
         ctx.stroke();
     }
 
 
     //vyska
     for (k = 0; k <= y; k++) {
-        ctx.moveTo(k*velP,0);    //x, y
-        ctx.lineTo(k*velP, y*velP); // odkud, kam
+        ctx.moveTo(k*velP,0);
+        ctx.lineTo(k*velP, y*velP);
         ctx.stroke();
     }
 
@@ -424,10 +426,9 @@ function vykresliKolecko(stredX, stredY, velP) {
 /**
  * fukce nakreslí vítěznou linku mezi dvěma posledními body
  * @param stredObj
- * @param player
  * created by: Verča
  */
-function drawVictoryLine(stredObj, player){
+function drawVictoryLine(stredObj){
     var c = $("canvas");
     var ctx = c[0].getContext("2d");
     ctx.beginPath();
